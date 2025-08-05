@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+__MACOSX/
+
+# Flutter
+/build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.dart_tool/
