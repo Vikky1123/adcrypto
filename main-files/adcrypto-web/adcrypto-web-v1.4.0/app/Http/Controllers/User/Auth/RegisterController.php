@@ -134,6 +134,41 @@ class RegisterController extends Controller
     protected function registered(Request $request, $user)
     {
         try{
+            // Check if email verification is required
+            if ($this->basic_settings->email_verification == true) {
+                // Log the user out since they need to verify email first
+                $this->guard()->logout();
+                
+                // Generate new verification code and send email
+                try {
+                    // Generate verification data
+                    $data = [
+                        'user_id'       => $user->id,
+                        'code'          => generate_random_code(),
+                        'token'         => generate_unique_string("user_authorizations","token",200),
+                        'created_at'    => now(),
+                    ];
+
+                    // Store in database and send email
+                    \DB::beginTransaction();
+                    try{
+                        \App\Models\UserAuthorization::where("user_id",$user->id)->delete();
+                        \DB::table("user_authorizations")->insert($data);
+                        $user->notify(new \App\Notifications\User\Auth\SendAuthorizationCode((object) $data));
+                        \DB::commit();
+                        
+                        // Redirect to login page with unverified_email flag (same as LoginController)
+                        return redirect()->route('user.login')->with(['warning' => ['Please verify your email address. Check your email inbox to get verification code.'], 'unverified_email' => true]);
+                    }catch(\Exception $e) {
+                        \DB::rollBack();
+                        // Fall back to login message
+                        return redirect()->route('user.login')->with(['error' => ['Please verify your email address. Check your email inbox to get verification code.'], 'unverified_email' => true]);
+                    }
+                } catch (\Exception $e) {
+                    // If there's an error with mail verification, fall back to login message
+                    return redirect()->route('user.login')->with(['error' => ['Please verify your email address. Check your email inbox to get verification code.'], 'unverified_email' => true]);
+                }
+            }
             
             $this->createUserWallets($user);
             return redirect()->intended(route('user.dashboard'));

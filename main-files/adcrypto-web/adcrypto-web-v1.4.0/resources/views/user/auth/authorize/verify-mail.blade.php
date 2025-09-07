@@ -19,7 +19,10 @@
                     <a class="site-logo site-title" href="{{ setRoute('index') }}"><img src="{{ get_logo($basic_settings) }}" alt="site-logo"></a>
                 </div>
                 <h4 class="title">{{ __("Please enter the code") }}</h4>
-                <p>{{ __("We sent a 6 digit code here") }} <strong>{{ $email ?? ""}}</strong></p>
+                <p>{{ __("We sent a 6 digit code to your email address") }} <strong>{{ $email ?? ""}}</strong></p>
+                <div class="alert alert-info">
+                    <p>{{ __("You are seeing this page because you attempted to login with an unverified email address. Please check your email inbox for a verification code and enter it below to complete your registration.") }}</p>
+                </div>
                 <form action="{{ setRoute('user.authorize.mail.verify',$token) }}" method="POST" class="account-form">
                     @csrf
                     <div class="row">

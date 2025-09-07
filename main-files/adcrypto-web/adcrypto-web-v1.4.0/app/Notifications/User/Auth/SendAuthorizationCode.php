@@ -43,11 +43,18 @@ class SendAuthorizationCode extends Notification
     {
         $fullname = $notifiable->fullname;
         $data = $this->data;
+        
+        // Generate the verification URL
+        $verificationUrl = route('user.authorize.mail', $data->token);
+        
         return (new MailMessage)
                     ->subject("Account Authorization")
                     ->greeting("Hello ".$fullname . "!")
                     ->line('Need to verify your account before access your dashboard.')
                     ->line("Your verification code: ".$data->code)
+                    ->action('Verify Your Account', $verificationUrl)
+                    ->line('Or you can visit the following link to enter your verification code:')
+                    ->line($verificationUrl)
                     ->line('Thank you for using our application!');
     }
 

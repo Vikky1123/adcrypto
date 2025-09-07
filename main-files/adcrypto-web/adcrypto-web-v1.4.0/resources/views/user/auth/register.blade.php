@@ -6,7 +6,141 @@
 @extends('layouts.master')
 
 @push('css')
-    
+    <style>
+        .account-form-area {
+            background: rgba(10, 12, 35, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .form--control {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border-radius: 8px;
+        }
+        
+        .form--control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(1, 148, 252, 0.5);
+            box-shadow: 0 0 0 3px rgba(1, 148, 252, 0.2);
+        }
+        
+        .form--control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .btn-google {
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            padding: 13px 40px;
+            border-radius: 30px;
+            text-align: center;
+            z-index: 2;
+            -webkit-transition: all 0.5s;
+            transition: all 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            text-decoration: none;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-google::before {
+            position: absolute;
+            content: "";
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 100%;
+            background: #ffffff;
+            z-index: -1;
+            -webkit-transition: all 0.5s;
+            transition: all 0.5s;
+        }
+        
+        .btn-google:focus, .btn-google:hover {
+            color: #757575;
+        }
+        
+        .btn-google:focus::before, .btn-google:hover::before {
+            right: auto;
+            left: 0;
+            width: 100%;
+        }
+        
+        .btn-google i {
+            margin-right: 10px;
+            font-size: 18px;
+            color: #DB4437;
+            z-index: 3;
+        }
+        
+        .btn-google:focus i, .btn-google:hover i {
+            color: #DB4437;
+        }
+        
+        .or-section {
+            position: relative;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .or-section span {
+            background-color: #090B2C;
+            position: relative;
+            padding: 0 15px;
+            z-index: 1;
+            color: #c4c6c7;
+        }
+        
+        .or-section:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.2);
+            z-index: 0;
+        }
+        
+        .account-item label, .terms-item label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .account-control-btn {
+            color: #0194FC;
+            font-weight: 500;
+        }
+        
+        .account-control-btn:hover {
+            color: #0178d4;
+            text-decoration: underline;
+        }
+        
+        a {
+            color: #0194FC;
+        }
+        
+        a:hover {
+            color: #0178d4;
+            text-decoration: underline;
+        }
+        
+        .custom-check-group label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -15,7 +149,7 @@ Start Account
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <div class="account-section">
     <div class="account-inner">
-        <div class="account-area change-form">
+        <div class="account-area change-form" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px;">
             <div class="account-thumb">
                 <img src="{{ get_image($register->value->image , 'site-section') }}" alt="element">
             </div>
@@ -53,6 +187,17 @@ Start Account
                         <div class="col-lg-12 form-group text-center">
                             <button type="submit" class="btn--base w-100"><span class="w-100">{{ __("Register Now") }}</span></button>
                         </div>
+                        
+                        <!-- Google Register Button -->
+                        <div class="col-lg-12 form-group text-center">
+                            <div class="or-section">
+                                <span>{{ __("OR") }}</span>
+                            </div>
+                            <a href="{{ route('user.social.auth.google') }}" class="btn-google w-100">
+                                <i class="fab fa-google"></i> {{ __("Sign up with Google") }}
+                            </a>
+                        </div>
+                        
                         <div class="col-lg-12 text-center">
                             <div class="account-item">
                                 <label>{{ __("Already Have An Account?") }} <a href="{{ setRoute('user.login') }}" class="account-control-btn">{{ __("Login Now") }}</a></label>
